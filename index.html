@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+
+<html lang="ar" dir="ltr">
+
+<head>
+
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adam Dev | Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+
+</head>
+
+
+<body>
+
+    <header>
+
+
+        <div class="logo"> <h2>Adam <span>DEV</span></h2></div>
+
+        <nav>
+            <ul>
+                <li><a href="#" class="active">Home</a></li>
+                <li><a href="#about-stats">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#cotact">Contact</a></li>
+            </ul>
+        </nav>
+
+
+    </header>
+
+    <section class="hero">
+
+
+        <div class="hero-text">
+
+            <h1>Hi, I'm <span>Adam</span></h1>
+            <h2>Web Developer <span>and</span> video editor</h2>
+            <p>I build beautiful and responsive websites using HTML, CSS and JavaScript.</p>
+            <div class="hero-btns">
+                <a href="#projects"><button class="btn-primary">View My Work <i class="fas fa-arrow-right"></i></button></a>
+                <a href="https://wa.me/2120627542469" target="_blank"> <button class="btn-secondary">Contact Me <i class="fas fa-comment"></i></button></a>
+            </div>
+            <div class="social-links">
+               <a href="https://github.com/kounaadam1-max" target="_blank"><i class="fab fa-github"></i></a> 
+               <a href="https://www.instagram.com/ad_hafid_2011/" target="_blank"> <i class="fab fa-instagram"></i></a>
+               <a href="https://wa.me/2120627542469" target="_blank"> <i class="fas fa-envelope"></i></a>
+            </div>
+
+        </div>
+
+        <div class="hero-image">
+            <div class="img-container">
+                <img src="InShot_20260420_112922493.jpg" alt="Adam">
+            </div>
+        </div>
+
+
+    </section>
+
+    <section class="about-stats" id="about-stats">
+
+
+        <div class="stat-card">
+            <i class="fas fa-briefcase"></i>
+            <h3>+2</h3>
+            <p>Years of Experience</p>
+        </div>
+
+        <div class="stat-card">
+            <i class="fas fa-tasks"></i>
+            <h3>10+</h3>
+            <p>Projects Completed</p>
+        </div>
+
+        <div class="stat-card">
+            <i class="fas fa-smile"></i>
+            <h3>100%</h3>
+            <p>Client Satisfaction</p>
+        </div>
+
+
+    </section>
+
+
+    <h2 class="section-title">My Skills</h2>
+
+    <section class="skills" id="skills">
+
+
+        <div class="skill-card"><i class="fab fa-html5"></i><p>HTML 95%</p></div>
+        <div class="skill-card"><i class="fab fa-css3-alt"></i><p>CSS 70%</p></div>
+        <div class="skill-card"><i class="fab fa-js"></i><p>JavaScript 70%</p></div>
+        <div class="skill-card"><i class="fa-solid fa-clapperboard"></i><p>Video editing 99.99%</p></div>
+        <div class="skill-card"><i class="fa-solid fa-file-word"></i><p>word/pdf 80%</p></div>
+
+
+    </section>
+
+    <h2 class="section-title">My Projects</h2>
+
+    <section class="projects" id="projects">
+
+
+        <div class="project-card">
+            <img src="Capture d’écran_11-5-2026_181229_.jpeg">
+            <div class="project-info">
+                <h3>Portfolio Website</h3>
+                <p>JavaScript/css/HTML</p>
+            </div>
+        </div>
+
+        <div class="project-card">
+            <img src="Capture d’écran_11-5-2026_191146_www.youtube.com.jpeg">
+            <div class="project-info">
+                <h3 style="border:5cm;"><a href="https://www.youtube.com/@adhafid/featured" target="_blank" >my chanel</a></h3>
+                <p>video editing</p>
+            </div>
+        </div>
+
+        <div class="project-card">
+            <img src="Capture d’écran_11-5-2026_191316_kounaadam1-max.github.io.jpeg" alt="Portfolio">
+            <div class="project-info">
+                <h3>web for studying</h3>
+                <p>HTML / CSS / JS</p>
+            </div>
+        </div>
+
+        
+    </section>
+
+
+    <section class="contact-section" id="cotact">
+
+
+        <div class="contact-container">
+
+            <div class="contact-info">
+                <h3>Let's Work Together</h3>
+                <p>I'm available for freelance work. Feel free to contact me!</p>
+                <div class="contact-details">
+                    <p><i class="fas fa-envelope"></i> kounaadam1@email.com</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Morocco, Casablanca</p>
+                </div>
+               <div class="fiverr.">
+                   <button class="btn-primary">
+                         <a href="https://fr.fiverr.com/adamkouna/edit-a-professional-showreel" target="_blank">here is my fiverr.</a>
+                   </button> 
+               </div>
+            </div>
+            
+            <form class="contact-form" action="https://formsubmit.co/kounaadam1@gmail.com" method="post">
+
+                  
+
+                <div class="input-group">
+                    <input type="text" placeholder="Your Name" name="fulname" class="in" value="" required>
+                    <input type="email" placeholder="Your Email" name="email" class="in" value="" required>
+                </div>
+
+                <input type="text" placeholder="Subject" name="subject" class="in"v required>
+                <textarea placeholder="Message" name="description" class="in" value="" required></textarea>
+
+                <div>
+                   <i class="fa-solid fa-mobile-screen-button"></i>
+                   <input type="tel" name="numberPhone"  class="in" placeholder="06XXXXXXXX" value="" required/>
+                </div>   
+
+                <button type="submit" class="send-btn" id="irsal" onclick="remForm()">Send Message <i class="fas fa-paper-plane"></i></button>
+                
+            </form>
+        </div>
+        
+    </section>
+
+
+
+    <footer>
+
+
+        <p>© 2024 Adam Dev. All rights reserved.</p>
+        <div class="scroll-top"><i class="fas fa-arrow-up"></i></div>
+
+
+    </footer>
+
+
+    <script src="script.js"></script>
+
+
+</body>
+
+</html>
