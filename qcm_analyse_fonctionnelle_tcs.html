@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full bg-slate-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QCM Analyse Fonctionnelle - TCS</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            200: '#bfdbfe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="h-full font-sans text-slate-800 flex flex-col bg-slate-50 antialiased selection:bg-brand-500 selection:text-white">
+
+    <!-- Header / Navbar -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-brand-600 flex items-center justify-center text-white shadow-md shadow-brand-500/20">
+                    <i class="fa-solid fa-microchip text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-slate-900 leading-tight">Analyse Fonctionnelle</h1>
+                    <p class="text-xs font-medium text-brand-600">Tronc Commun Scientifique (TCS)</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-3">
+                <span id="header-score" class="hidden text-sm font-semibold px-3 py-1 bg-brand-50 text-brand-700 border border-brand-200 rounded-full">
+                    Note : -- / 20
+                </span>
+                <button id="btn-restart-header" onclick="resetQuiz()" class="hidden text-sm px-3 py-1.5 text-slate-600 hover:text-brand-600 hover:bg-slate-100 rounded-lg transition">
+                    <i class="fa-solid fa-rotate-right mr-1.5"></i>Recommencer
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-1 max-w-4xl w-full mx-auto px-4 py-6 sm:px-6 sm:py-8 flex flex-col">
+        
+        <!-- Welcome / Start Screen -->
+        <section id="screen-welcome" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-10 my-auto text-center">
+            <div class="w-20 h-20 bg-brand-50 text-brand-600 rounded-full flex items-center justify-center mx-auto mb-6 text-3xl shadow-inner">
+                <i class="fa-solid fa-graduation-cap"></i>
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 mb-3">Test d'Évaluation : Analyse Fonctionnelle</h2>
+            <p class="text-slate-600 max-w-xl mx-auto mb-8 text-sm sm:text-base leading-relaxed">
+                Ce QCM interactif contient <strong>30 questions</strong> basées fidèlement sur le cours du Tronc Commun Scientifique (Entreprise, Besoin, Exigences, Produit, Système Technique, Bête à cornes, Diagramme Pieuvre, FAST, etc.).
+            </p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto mb-8 text-left text-xs sm:text-sm">
+                <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-start space-x-3">
+                    <i class="fa-solid fa-list-check text-brand-500 text-lg mt-0.5"></i>
+                    <div>
+                        <h4 class="font-semibold text-slate-800">30 Questions</h4>
+                        <p class="text-slate-500">Couvre 100% de la leçon</p>
+                    </div>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-start space-x-3">
+                    <i class="fa-solid fa-calculator text-brand-500 text-lg mt-0.5"></i>
+                    <div>
+                        <h4 class="font-semibold text-slate-800">Note sur 20</h4>
+                        <p class="text-slate-500">Calcul automatique précis</p>
+                    </div>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-start space-x-3">
+                    <i class="fa-solid fa-lightbulb text-brand-500 text-lg mt-0.5"></i>
+                    <div>
+                        <h4 class="font-semibold text-slate-800">Corrigé Détaillé</h4>
+                        <p class="text-slate-500">Explications complètes</p>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="startQuiz()" class="inline-flex items-center justify-center space-x-2 px-8 py-3.5 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-xl shadow-lg shadow-brand-500/30 transition-all hover:scale-105 active:scale-95 text-base">
+                <span>Commencer le QCM</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </section>
+
+        <!-- Quiz Screen -->
+        <section id="screen-quiz" class="hidden flex-1 flex flex-col">
+            
+            <!-- Progress Bar & Question Counter -->
+            <div class="mb-6 bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div class="flex items-center space-x-3 w-full sm:w-auto">
+                    <span id="question-badge" class="px-3 py-1 bg-brand-100 text-brand-800 font-bold rounded-lg text-sm">
+                        Q 1 / 30
+                    </span>
+                    <span id="category-tag" class="text-xs font-semibold uppercase tracking-wider text-slate-400 truncate max-w-[200px] sm:max-w-xs">
+                        Catégorie
+                    </span>
+                </div>
+                
+                <div class="w-full sm:w-64 flex items-center space-x-3">
+                    <div class="flex-1 bg-slate-100 h-2.5 rounded-full overflow-hidden border border-slate-200">
+                        <div id="progress-bar" class="bg-brand-600 h-full w-0 transition-all duration-300 rounded-full"></div>
+                    </div>
+                    <span id="progress-text" class="text-xs font-bold text-slate-500 min-w-[35px]">0%</span>
+                </div>
+            </div>
+
+            <!-- Question Card -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8 flex-1 flex flex-col justify-between">
+                <div>
+                    <!-- Question Title -->
+                    <h3 id="question-text" class="text-lg sm:text-xl font-bold text-slate-900 mb-6 leading-relaxed">
+                        Intitulé de la question
+                    </h3>
+
+                    <!-- Options Container -->
+                    <div id="options-container" class="space-y-3 mb-6">
+                        <!-- Rendered by JS -->
+                    </div>
+                </div>
+
+                <!-- Navigation Controls -->
+                <div class="pt-6 border-t border-slate-100 flex items-center justify-between gap-3">
+                    <button id="btn-prev" onclick="navigateQuestion(-1)" class="px-5 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-100 font-medium text-sm transition flex items-center space-x-2 disabled:opacity-40 disabled:cursor-not-allowed">
+                        <i class="fa-solid fa-chevron-left text-xs"></i>
+                        <span>Précédent</span>
+                    </button>
+
+                    <span class="text-xs text-slate-400 hidden sm:inline-block">Répondez à toutes les questions pour valider</span>
+
+                    <button id="btn-next" onclick="navigateQuestion(1)" class="px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-medium text-sm transition flex items-center space-x-2 shadow-sm">
+                        <span>Suivant</span>
+                        <i class="fa-solid fa-chevron-right text-xs"></i>
+                    </button>
+
+                    <button id="btn-finish" onclick="submitQuiz()" class="hidden px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm transition flex items-center space-x-2 shadow-md shadow-emerald-600/20">
+                        <i class="fa-solid fa-check"></i>
+                        <span>Terminer et Voir Note</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Results Screen -->
+        <section id="screen-results" class="hidden flex-1 flex flex-col space-y-6">
+            
+            <!-- Result Summary Card -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8 text-center relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-2 bg-brand-600" id="result-accent-bar"></div>
+                
+                <h2 class="text-2xl font-bold text-slate-900 mb-2">Résultats de votre évaluation</h2>
+                <p class="text-slate-500 text-sm mb-6">Voici le bilan de vos connaissances en Analyse Fonctionnelle</p>
+
+                <div class="inline-flex flex-col items-center justify-center p-6 bg-slate-50 rounded-2xl border border-slate-200 mb-6 w-full max-w-xs">
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Note Finale</span>
+                    <div class="text-4xl sm:text-5xl font-extrabold text-slate-900 mb-1" id="final-score-display">
+                        00.0 <span class="text-2xl text-slate-400">/ 20</span>
+                    </div>
+                    <span id="score-appreciation" class="text-sm font-bold px-3 py-1 rounded-full bg-slate-200 text-slate-700 mt-2">
+                        Mention
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-xl mx-auto text-center text-xs sm:text-sm">
+                    <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl">
+                        <div class="text-emerald-700 font-bold text-lg sm:text-xl" id="count-correct">0</div>
+                        <div class="text-emerald-600 text-xs">Correctes</div>
+                    </div>
+                    <div class="p-3 bg-rose-50 border border-rose-200 rounded-xl">
+                        <div class="text-rose-700 font-bold text-lg sm:text-xl" id="count-incorrect">0</div>
+                        <div class="text-rose-600 text-xs">Incorrectes</div>
+                    </div>
+                    <div class="p-3 bg-amber-50 border border-amber-200 rounded-xl">
+                        <div class="text-amber-700 font-bold text-lg sm:text-xl" id="count-skipped">0</div>
+                        <div class="text-amber-600 text-xs">Non répondues</div>
+                    </div>
+                    <div class="p-3 bg-brand-50 border border-brand-200 rounded-xl">
+                        <div class="text-brand-700 font-bold text-lg sm:text-xl" id="percentage-display">0%</div>
+                        <div class="text-brand-600 text-xs">Réussite</div>
+                    </div>
+                </div>
+
+                <div class="mt-8 flex flex-wrap justify-center gap-4">
+                    <button onclick="resetQuiz()" class="px-6 py-3 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-xl shadow-md transition flex items-center space-x-2 text-sm">
+                        <i class="fa-solid fa-rotate-right"></i>
+                        <span>Recommencer le test</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Detailed Correction Breakdown -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+                <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
+                    <h3 class="text-lg font-bold text-slate-900 flex items-center space-x-2">
+                        <i class="fa-solid fa-clipboard-check text-brand-600"></i>
+                        <span>Correction détaillée (30 questions)</span>
+                    </h3>
+                </div>
+
+                <div id="correction-list" class="space-y-6">
+                    <!-- Rendered by JS -->
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-4 mt-auto">
+        <div class="max-w-5xl mx-auto px-4 text-center text-xs text-slate-400">
+            Support de Révision de Sciences de l'Ingénieur - Tronc Commun Scientifique (TCS)
+        </div>
+    </footer>
+
+    <!-- JavaScript Data and Logic -->
+    <script>
+        // 30 Questions accurately based on the provided images
+        const quizData = [
+            // I) L'entreprise industrielle & Structure
+            {
+                category: "L'entreprise industrielle",
+                question: "Selon le cours, quelle est la définition exacte d'une entreprise industrielle ?",
+                options: [
+                    "Une organisation à but non lucratif qui offre des services gratuits aux citoyens",
+                    "Un système de production composé d'un ensemble de ressources humaines et matérielles pour produire des biens à les vendre afin de réaliser des bénéfices",
+                    "Un magasin commercial de revente directe de marchandises sans transformation",
+                    "Un centre d'étude scientifique exclusivement dédié à la recherche fondamentale"
+                ],
+                correct: 1,
+                explanation: "L'entreprise industrielle est définie comme un système de production combinant ressources humaines et matérielles pour fabriquer des produits destinés à la vente afin d'engendrer des bénéfices."
+            },
+            {
+                category: "L'entreprise industrielle",
+                question: "Que définit et représente la structure organisationnelle d'une entreprise ?",
+                options: [
+                    "Uniquement la liste des machines de l'usine et leurs tarifs",
+                    "Le montant total des taxes à payer à l'État",
+                    "Les relations de travail entre les différents collaborateurs pour un fonctionnement optimal et compétitif",
+                    "L'agenda de livraison des produits chez les clients"
+                ],
+                correct: 2,
+                explanation: "La structure organisationnelle définit et représente les relations de travail entre les collaborateurs de façon à ce que l'entreprise fonctionne au mieux et soit compétitive."
+            },
+            {
+                category: "L'entreprise industrielle",
+                question: "Quel document schéma représentatif est utilisé pour faire apparaître la structure d'une entreprise ?",
+                options: [
+                    "Le schéma électrique",
+                    "L'organigramme",
+                    "Le cahier des charges",
+                    "Le diagramme Pieuvre"
+                ],
+                correct: 1,
+                explanation: "La forme d'organisation structurelle d'une entreprise est représentée sous forme d'un organigramme."
+            },
+            {
+                category: "L'entreprise industrielle",
+                question: "Dans l'organigramme de l'entreprise du cours, sous quelle direction s'articulent la Fabrication, les Méthodes et la R&D ?",
+                options: [
+                    "Comptabilité",
+                    "Logistique",
+                    "Marketing / Vente",
+                    "Production"
+                ],
+                correct: 3,
+                explanation: "Le service Production regroupe notamment la Fabrication, le bureau des Méthodes et le bureau d'études (R&D)."
+            },
+
+            // II) Besoin & Types de besoin
+            {
+                category: "Le Besoin",
+                question: "Comment est défini le 'besoin' dans le cours ?",
+                options: [
+                    "Une contrainte stricte imposée par la loi",
+                    "Une nécessité ou un désir éprouvé par un utilisateur",
+                    "Le coût total de fabrication d'un objet technique",
+                    "La quantité d'énergie consommée par un appareil"
+                ],
+                correct: 1,
+                explanation: "Selon la définition du cours, le besoin est une nécessité ou un désir éprouvé par un utilisateur."
+            },
+            {
+                category: "Le Besoin (Utilisateur)",
+                question: "Du point de vue de l'utilisateur, que sont les 'besoins primaires' ?",
+                options: [
+                    "Ceux qui comprennent le superflu et le luxe",
+                    "Ceux qui sont indispensables à la vie (manger, boire, respirer...)",
+                    "Ceux qui sont nécessaires mais non indispensables à la survie (ex: logement)",
+                    "Ceux qui sont toujours écrits dans un contrat"
+                ],
+                correct: 1,
+                explanation: "Les besoins primaires de l'utilisateur sont ceux qui sont indispensables à la vie (ex: manger, boire, respirer)."
+            },
+            {
+                category: "Le Besoin (Utilisateur)",
+                question: "Du point de vue utilisateur, le logement fait partie de quelle catégorie de besoins ?",
+                options: [
+                    "Besoins primaires",
+                    "Besoins secondaires",
+                    "Besoins tertiaires",
+                    "Besoins latents"
+                ],
+                correct: 1,
+                explanation: "Le cours indique le logement comme exemple classique des besoins secondaires (nécessaire mais non indispensable à la survie)."
+            },
+            {
+                category: "Le Besoin (Utilisateur)",
+                question: "Que regroupent les 'besoins tertiaires' pour un utilisateur ?",
+                options: [
+                    "Les besoins indispensables à la survie immédiate",
+                    "Les exigences formulées par le bureau des méthodes",
+                    "Ce qui comprend le superflu (produits de luxe)",
+                    "Les obligations légales d'une entreprise"
+                ],
+                correct: 2,
+                explanation: "Les besoins tertiaires englobent tout ce qui relève du superflu et du luxe."
+            },
+            {
+                category: "Le Besoin (Entreprise)",
+                question: "Du point de vue de l'entreprise, qu'est-ce qu'un besoin 'Explicite' ?",
+                options: [
+                    "Un besoin potentiel non encore détecté",
+                    "Un besoin ressenti mais jamais exprimé par le client",
+                    "Un besoin clairement identifié en détail par le client",
+                    "Une fonction de service secondaire"
+                ],
+                correct: 2,
+                explanation: "Le besoin explicite est un besoin clairement identifié et exprimé en détail par le client."
+            },
+            {
+                category: "Le Besoin (Entreprise)",
+                question: "Comment qualifie-t-on un besoin que le client ressent parfaitement mais qui n'est pas exprimé ?",
+                options: [
+                    "Besoin Explicite",
+                    "Besoin Implicite",
+                    "Besoin Latent",
+                    "Besoin Tertiaire"
+                ],
+                correct: 1,
+                explanation: "Le besoin implicite correspond à ce que le client ressent parfaitement mais qu'il ne formule pas explicitement."
+            },
+            {
+                category: "Le Besoin (Entreprise)",
+                question: "Qu'est-ce qu'un besoin 'Latent' du point de vue de l'entreprise ?",
+                options: [
+                    "Un besoin déjà consigné dans le cahier des charges",
+                    "Un besoin potentiel non encore détecté et auquel on n'a pas encore de réponse",
+                    "Un besoin lié à la survie biologique de l'utilisateur",
+                    "Une contrainte de coût sur l'emballage"
+                ],
+                correct: 1,
+                explanation: "Les besoins latents sont des besoins potentiels non encore détectés et pour lesquels aucune réponse n'a été proposée."
+            },
+
+            // III) Exigence & Produit
+            {
+                category: "L'Exigence",
+                question: "Quelle est la définition exacte d'une exigence ?",
+                options: [
+                    "Une simple idée de produit sans document formel",
+                    "Une condition ou capacité que doit présenter un système pour satisfaire un contrat, une norme ou une spécification",
+                    "Le montant du bénéfice d'un produit",
+                    "Une fonction assurée par la chaîne d'énergie"
+                ],
+                correct: 1,
+                explanation: "L'exigence est une condition ou capacité que doit présenter un système pour satisfaire un contrat, un standard ou une spécification impose."
+            },
+            {
+                category: "L'Exigence",
+                question: "Sous quelle forme doit toujours être décrite une exigence ?",
+                options: [
+                    "Sous la forme d'un schéma bloc",
+                    "Sous la forme d'une action",
+                    "Sous la forme d'un pourcentage de profit",
+                    "Sous la forme d'une couleur d'emballage"
+                ],
+                correct: 1,
+                explanation: "Selon le cours, l'exigence doit obligatoirement être décrite sous la forme d'une action."
+            },
+            {
+                category: "Le Produit",
+                question: "Quels sont les deux types de produits distingués dans la leçon ?",
+                options: [
+                    "Matériel (bien concret) et Service (bien non concret)",
+                    "Manuel et Électronique",
+                    "Primaire et Tertiaire",
+                    "Entrant et Sortant"
+                ],
+                correct: 0,
+                explanation: "Le cours distingue le produit Matériel (bien concret : stylo, voiture) et le produit Service (bien non concret : transport, livraison)."
+            },
+            {
+                category: "Cycle de vie du produit",
+                question: "Quelle est la toute première étape du cycle de vie d'un produit ?",
+                options: [
+                    "Étude de faisabilité",
+                    "Analyse du besoin",
+                    "Industrialisation du produit",
+                    "Homologation"
+                ],
+                correct: 1,
+                explanation: "La première étape du cycle de vie est l'Analyse du besoin (suivie de l'Étude de faisabilité, la Conception, etc.)."
+            },
+            {
+                category: "Cycle de vie du produit",
+                question: "Quel service de l'entreprise est responsable de l'étape 'Industrialisation' (réalisation du prototype) ?",
+                options: [
+                    "Le service Marketing",
+                    "Le service Commercial",
+                    "Le bureau des Méthodes",
+                    "Le service Comptabilité"
+                ],
+                correct: 2,
+                explanation: "Organiser le procédé de fabrication et réaliser le prototype lors de l'industrialisation est pris en charge par le bureau des méthodes."
+            },
+            {
+                category: "Qualité du produit",
+                question: "Parmi ces éléments, lequel NE FAIT PAS partie des critères de qualité du produit cités dans le cours ?",
+                options: [
+                    "La conformité à l'usage",
+                    "La sûreté de fonctionnement (Fiabilité, maintenabilité...)",
+                    "L'optimisation du coût (minimisation de la charge)",
+                    "L'interdiction de recycler les composants"
+                ],
+                correct: 3,
+                explanation: "La qualité du produit repose sur la conformité à l'usage, la sûreté de fonctionnement et l'optimisation du coût. Le recyclage fait partie de l'élimination."
+            },
+
+            // IV) Processus (Système technique)
+            {
+                category: "Système Technique",
+                question: "Qu'est-ce qu'un système technique d'après la définition du cours ?",
+                options: [
+                    "Un ensemble d'employés qui gèrent les finances",
+                    "Un ensemble de constituants organisés en fonction d'un but à atteindre en opérant sur des matières d'œuvre",
+                    "Un document manuscrit contenant les exigences d'un projet",
+                    "Un logiciel de dessin assisté par ordinateur uniquement"
+                ],
+                correct: 1,
+                explanation: "Un système technique est un ensemble de constituants organisés en fonction d'un but à atteindre, opérant sur des matières d'œuvre pour les faire passer d'un état initial à un état final."
+            },
+            {
+                category: "Matière d'œuvre (MO)",
+                question: "Quelles sont les trois catégories de matières d'œuvre (MO) ?",
+                options: [
+                    "Liquide, Solide, Gazeux",
+                    "Primaire, Secondaire, Tertiaire",
+                    "Matière, Énergie, Information",
+                    "Entrée, Sortie, Perturbation"
+                ],
+                correct: 2,
+                explanation: "La matière d'œuvre (MO) peut être classée en trois catégories : Matière (pièce à usiner), Énergie (à transformer) ou Information (donnée à traiter)."
+            },
+            {
+                category: "Valeur Ajoutée (VA)",
+                question: "Quelle est la formule exacte de la Valeur Ajoutée (VA) dans la modélisation d'un système ?",
+                options: [
+                    "VA = MOE + MOS",
+                    "VA = MOS - MOE",
+                    "VA = MOE / MOS",
+                    "VA = Perturbations x Énergie"
+                ],
+                correct: 1,
+                explanation: "La valeur ajoutée est la différence entre la Matière d'Œuvre Sortante et la Matière d'Œuvre Entrante : VA = MOS - MOE."
+            },
+            {
+                category: "Types de systèmes",
+                question: "Comment se caractérise un 'système automatisé' ?",
+                options: [
+                    "L'être humain fournit l'énergie musculaire et la commande",
+                    "L'être humain est intégré dans la partie commande avec une source extérieure",
+                    "Plusieurs éléments exécutent des tâches programmées sans que l'intervention de l'homme ne soit nécessaire",
+                    "Le système ne fonctionne qu'en présence continuelle de l'utilisateur"
+                ],
+                correct: 2,
+                explanation: "Un système automatisé exécute un ensemble de tâches programmées sans qu'aucune intervention humaine ne soit nécessaire."
+            },
+            {
+                category: "Chaînes du système",
+                question: "Quelles sont les 3 fonctions principales de la chaîne d'information ?",
+                options: [
+                    "Alimenter, Distribuer, Convertir",
+                    "Acquérir, Traiter, Communiquer",
+                    "Concevoir, Fabriquer, Vendre",
+                    "Énoncer, Valider, Caractériser"
+                ],
+                correct: 1,
+                explanation: "La chaîne d'information comporte 3 fonctions fondamentales : Acquérir, Traiter, Communiquer."
+            },
+            {
+                category: "Chaînes du système",
+                question: "Dans la chaîne d'énergie, l'ordre séquentiel correct des fonctions est :",
+                options: [
+                    "Convertir -> Alimenter -> Transmettre -> Distribuer",
+                    "Alimenter -> Distribuer -> Convertir -> Transmettre",
+                    "Traiter -> Acquérir -> Communiquer -> Agir",
+                    "Distribuer -> Alimenter -> Transmettre -> Convertir"
+                ],
+                correct: 1,
+                explanation: "La chaîne d'énergie suit le parcours : Alimenter -> Distribuer -> Convertir -> Transmettre (puis Agir sur la MO)."
+            },
+
+            // V) Réponse au besoin
+            {
+                category: "Outil Bête à Cornes",
+                question: "Quelles sont les 3 questions fondamentales de l'outil 'Bête à cornse' pour énoncer le besoin ?",
+                options: [
+                    "Pourquoi ? Comment ? Combien ?",
+                    "À qui rend-il service ? Sur quoi agit-il ? Dans quel but ?",
+                    "Où ? Quand ? Pourquoi ?",
+                    "Qui l'a fabriqué ? Quel est son prix ? Est-il garanti ?"
+                ],
+                correct: 1,
+                explanation: "Pour énoncer le besoin fondamental avec l'outil Bête à cornse, on répond à : 1° À qui le produit rend-il service ? 2° Sur quoi agit-il ? 3° Dans quel but ?"
+            },
+            {
+                category: "Validation du besoin",
+                question: "Lors de la phase de validation du besoin, quelle question pose-t-on pour s'assurer de sa stabilité ?",
+                options: [
+                    "Combien d'exemplaires va-t-on vendre ?",
+                    "Qu'est-ce qui pourrait faire évoluer ou disparaître le besoin ?",
+                    "Quel est le salaire des ouvriers ?",
+                    "Quelle est la couleur préférée des clients ?"
+                ],
+                correct: 1,
+                explanation: "La validation du besoin se fait via 3 questions : Pourquoi le produit existe-t-il ?, Qu'est-ce qui pourrait le faire évoluer ?, Qu'est-ce qui pourrait le faire disparaître ?"
+            },
+
+            // VI) Analyse Fonctionnelle (Externe & Interne)
+            {
+                category: "Analyse fonctionnelle",
+                question: "Comment considère-t-on le produit dans une Analyse Fonctionnelle Externe ?",
+                options: [
+                    "Comme un ensemble de schémas électroniques internes",
+                    "Comme une 'boîte noire' capable de fournir des services dans son environnement",
+                    "Comme un simple coût financier",
+                    "Comme une suite d'équations mathématiques"
+                ],
+                correct: 1,
+                explanation: "L'analyse fonctionnelle externe décrit le point de vue de l'utilisateur et considère le produit comme une 'boîte noire'."
+            },
+            {
+                category: "Fonctions de Service",
+                question: "Quelle est la différence entre une fonction d'usage et une fonction d'estime ?",
+                options: [
+                    "L'usage justifie le POURQUOI de l'utilisation ; l'estime concerne l'aspect d'esthétisme, de qualité, de coût",
+                    "L'usage est interne ; l'estime est totalement invisible",
+                    "L'usage est gratuit ; l'estime est payante",
+                    "Il n'y a aucune différence entre les deux"
+                ],
+                correct: 0,
+                explanation: "La fonction d'usage justifie le pourquoi de l'utilisation du système, alors que la fonction d'estime concerne le goût, l'esthétisme, la qualité et l'image."
+            },
+            {
+                category: "Diagramme Pieuvre",
+                question: "Dans le diagramme Pieuvre (APTE), que traduit une Fonction Contrainte (FC) ?",
+                options: [
+                    "La relation directe entre deux éléments du milieu extérieur par l'intermédiaire du produit",
+                    "Les réactions ou résistances à des éléments du milieu extérieur qui limitent la liberté du concepteur",
+                    "La vitesse maximale du moteur électrique",
+                    "L'organigramme de la direction générale"
+                ],
+                correct: 1,
+                explanation: "Les fonctions contraintes (FC) traduisent les réactions ou résistances face aux éléments du milieu extérieur et limitent la liberté du concepteur."
+            },
+            {
+                category: "Caractérisation",
+                question: "Quelle classe de flexibilité (F0 à F3) désigne un niveau de critère IMPÉRATIF (flexibilité nulle) ?",
+                options: [
+                    "Classe F0 (Flexibilité nulle)",
+                    "Classe F1 (Flexibilité faible)",
+                    "Classe F2 (Flexibilité moyenne)",
+                    "Classe F3 (Flexibilité forte)"
+                ],
+                correct: 0,
+                explanation: "Selon le tableau des classes de flexibilité du cours : Classe F0 = Flexibilité nulle (niveau impératif)."
+            },
+            {
+                category: "Outils de l'Analyse Interne",
+                question: "Quel outil utilise la méthode interrogative 'Pourquoi cette fonction doit-elle être assurée ?' et 'Comment ?' sous forme d'arbre ?",
+                options: [
+                    "Le diagramme Pieuvre",
+                    "La Bête à cornes",
+                    "Le diagramme FAST (Functional Analysis System Technique)",
+                    "L'organigramme de l'entreprise"
+                ],
+                correct: 2,
+                explanation: "Le diagramme FAST se présente sous forme d'arbre réalisant une décomposition en répondant aux questions 'Pourquoi ?' et 'Comment ?'."
+            }
+        ];
+
+        // State variables
+        let currentQuestionIndex = 0;
+        let userAnswers = new Array(quizData.length).fill(null);
+
+        // DOM elements
+        const screenWelcome = document.getElementById('screen-welcome');
+        const screenQuiz = document.getElementById('screen-quiz');
+        const screenResults = document.getElementById('screen-results');
+        
+        const questionBadge = document.getElementById('question-badge');
+        const categoryTag = document.getElementById('category-tag');
+        const progressBar = document.getElementById('progress-bar');
+        const progressText = document.getElementById('progress-text');
+        
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        
+        const btnPrev = document.getElementById('btn-prev');
+        const btnNext = document.getElementById('btn-next');
+        const btnFinish = document.getElementById('btn-finish');
+        const btnRestartHeader = document.getElementById('btn-restart-header');
+        const headerScore = document.getElementById('header-score');
+
+        // Initialize / Start Quiz
+        function startQuiz() {
+            screenWelcome.classList.add('hidden');
+            screenResults.classList.add('hidden');
+            screenQuiz.classList.remove('hidden');
+            btnRestartHeader.classList.remove('hidden');
+            
+            currentQuestionIndex = 0;
+            userAnswers.fill(null);
+            
+            renderQuestion();
+        }
+
+        // Render Current Question
+        function renderQuestion() {
+            const q = quizData[currentQuestionIndex];
+            
+            // Header stats
+            questionBadge.textContent = `Q ${currentQuestionIndex + 1} / ${quizData.length}`;
+            categoryTag.textContent = q.category;
+            
+            const progress = Math.round(((currentQuestionIndex + 1) / quizData.length) * 100);
+            progressBar.style.width = `${progress}%`;
+            progressText.textContent = `${progress}%`;
+
+            // Question title
+            questionText.textContent = `${currentQuestionIndex + 1}. ${q.question}`;
+
+            // Render Options
+            optionsContainer.innerHTML = '';
+            q.options.forEach((optText, optIndex) => {
+                const isSelected = userAnswers[currentQuestionIndex] === optIndex;
+                
+                const optionBtn = document.createElement('button');
+                optionBtn.type = 'button';
+                optionBtn.onclick = () => selectOption(optIndex);
+                
+                optionBtn.className = `w-full text-left p-4 rounded-xl border transition-all flex items-center space-x-3 text-sm sm:text-base ${
+                    isSelected 
+                        ? 'border-brand-600 bg-brand-50 text-brand-900 font-medium shadow-sm ring-1 ring-brand-500' 
+                        : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50'
+                }`;
+
+                const letter = String.fromCharCode(65 + optIndex); // A, B, C, D
+                
+                optionBtn.innerHTML = `
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs shrink-0 ${
+                        isSelected ? 'bg-brand-600 text-white' : 'bg-slate-100 text-slate-500'
+                    }">
+                        ${letter}
+                    </div>
+                    <span class="flex-1">${optText}</span>
+                    ${isSelected ? '<i class="fa-solid fa-circle-check text-brand-600 text-lg"></i>' : ''}
+                `;
+                
+                optionsContainer.appendChild(optionBtn);
+            });
+
+            // Update Navigation Buttons
+            btnPrev.disabled = currentQuestionIndex === 0;
+
+            if (currentQuestionIndex === quizData.length - 1) {
+                btnNext.classList.add('hidden');
+                btnFinish.classList.remove('hidden');
+            } else {
+                btnNext.classList.remove('hidden');
+                btnFinish.classList.add('hidden');
+            }
+        }
+
+        // Handle Option Select
+        function selectOption(index) {
+            userAnswers[currentQuestionIndex] = index;
+            renderQuestion();
+        }
+
+        // Navigate between questions
+        function navigateQuestion(direction) {
+            const newIndex = currentQuestionIndex + direction;
+            if (newIndex >= 0 && newIndex < quizData.length) {
+                currentQuestionIndex = newIndex;
+                renderQuestion();
+            }
+        }
+
+        // Submit and Calculate Score out of 20
+        function submitQuiz() {
+            screenQuiz.classList.add('hidden');
+            screenResults.classList.remove('hidden');
+            
+            let correctCount = 0;
+            let incorrectCount = 0;
+            let skippedCount = 0;
+
+            quizData.forEach((q, idx) => {
+                const userAns = userAnswers[idx];
+                if (userAns === null) {
+                    skippedCount++;
+                } else if (userAns === q.correct) {
+                    correctCount++;
+                } else {
+                    incorrectCount++;
+                }
+            });
+
+            // Calculate note / 20
+            const scoreNote20 = ((correctCount / quizData.length) * 20).toFixed(1);
+            const percentage = Math.round((correctCount / quizData.length) * 100);
+
+            // Display in summary
+            document.getElementById('final-score-display').innerHTML = `${scoreNote20} <span class="text-2xl text-slate-400">/ 20</span>`;
+            document.getElementById('count-correct').textContent = correctCount;
+            document.getElementById('count-incorrect').textContent = incorrectCount;
+            document.getElementById('count-skipped').textContent = skippedCount;
+            document.getElementById('percentage-display').textContent = `${percentage}%`;
+
+            // Header note badge
+            headerScore.textContent = `Note : ${scoreNote20} / 20`;
+            headerScore.classList.remove('hidden');
+
+            // Appreciation & Color styling
+            const appreciationElem = document.getElementById('score-appreciation');
+            const accentBar = document.getElementById('result-accent-bar');
+            
+            const noteNum = parseFloat(scoreNote20);
+            if (noteNum >= 16) {
+                appreciationElem.textContent = "Excellent ! Niveau maîtrisé";
+                appreciationElem.className = "text-xs font-bold px-3 py-1 rounded-full bg-emerald-100 text-emerald-800";
+                accentBar.className = "absolute top-0 left-0 w-full h-2 bg-emerald-500";
+            } else if (noteNum >= 14) {
+                appreciationElem.textContent = "Très Bien ! Bon travail";
+                appreciationElem.className = "text-xs font-bold px-3 py-1 rounded-full bg-teal-100 text-teal-800";
+                accentBar.className = "absolute top-0 left-0 w-full h-2 bg-teal-500";
+            } else if (noteNum >= 10) {
+                appreciationElem.textContent = "Moyen / Passable - À consolider";
+                appreciationElem.className = "text-xs font-bold px-3 py-1 rounded-full bg-amber-100 text-amber-800";
+                accentBar.className = "absolute top-0 left-0 w-full h-2 bg-amber-500";
+            } else {
+                appreciationElem.textContent = "Insuffisant - Révision nécessaire";
+                appreciationElem.className = "text-xs font-bold px-3 py-1 rounded-full bg-rose-100 text-rose-800";
+                accentBar.className = "absolute top-0 left-0 w-full h-2 bg-rose-500";
+            }
+
+            // Render Detailed Correction
+            renderCorrectionList();
+        }
+
+        // Render Detailed Correction Breakdown
+        function renderCorrectionList() {
+            const listContainer = document.getElementById('correction-list');
+            listContainer.innerHTML = '';
+
+            quizData.forEach((q, idx) => {
+                const userAns = userAnswers[idx];
+                const isCorrect = userAns === q.correct;
+                const isSkipped = userAns === null;
+
+                const card = document.createElement('div');
+                card.className = `p-4 sm:p-5 rounded-xl border text-sm transition ${
+                    isCorrect 
+                        ? 'border-emerald-200 bg-emerald-50/40' 
+                        : (isSkipped ? 'border-amber-200 bg-amber-50/40' : 'border-rose-200 bg-rose-50/40')
+                }`;
+
+                let statusBadge = '';
+                if (isCorrect) {
+                    statusBadge = `<span class="px-2.5 py-0.5 rounded-md bg-emerald-100 text-emerald-800 font-bold text-xs"><i class="fa-solid fa-check mr-1"></i>Correct</span>`;
+                } else if (isSkipped) {
+                    statusBadge = `<span class="px-2.5 py-0.5 rounded-md bg-amber-100 text-amber-800 font-bold text-xs"><i class="fa-solid fa-minus mr-1"></i>Non répondu</span>`;
+                } else {
+                    statusBadge = `<span class="px-2.5 py-0.5 rounded-md bg-rose-100 text-rose-800 font-bold text-xs"><i class="fa-solid fa-xmark mr-1"></i>Incorrect</span>`;
+                }
+
+                const userAnsText = isSkipped ? '<em>Aucune réponse sélectionnée</em>' : q.options[userAns];
+                const correctAnsText = q.options[q.correct];
+
+                card.innerHTML = `
+                    <div class="flex items-start justify-between gap-3 mb-2">
+                        <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">${q.category}</span>
+                        ${statusBadge}
+                    </div>
+                    <h4 class="font-bold text-slate-900 text-base mb-3">${idx + 1}. ${q.question}</h4>
+
+                    <div class="space-y-1.5 mb-3 text-xs sm:text-sm">
+                        <div class="flex items-start space-x-2">
+                            <span class="font-semibold text-slate-500 min-w-[110px]">Votre réponse :</span>
+                            <span class="${isCorrect ? 'text-emerald-700 font-medium' : (isSkipped ? 'text-amber-700' : 'text-rose-700 line-through')}">
+                                ${userAnsText}
+                            </span>
+                        </div>
+                        ${!isCorrect ? `
+                            <div class="flex items-start space-x-2">
+                                <span class="font-semibold text-slate-500 min-w-[110px]">Bonne réponse :</span>
+                                <span class="text-emerald-700 font-semibold">${correctAnsText}</span>
+                            </div>
+                        ` : ''}
+                    </div>
+
+                    <div class="p-3 rounded-lg bg-white/80 border border-slate-200/60 text-slate-600 text-xs leading-relaxed">
+                        <strong class="text-slate-800"><i class="fa-solid fa-circle-info text-brand-500 mr-1"></i>Explication du cours :</strong>
+                        ${q.explanation}
+                    </div>
+                `;
+
+                listContainer.appendChild(card);
+            });
+        }
+
+        // Reset Quiz to initial state
+        function resetQuiz() {
+            userAnswers.fill(null);
+            currentQuestionIndex = 0;
+            headerScore.classList.add('hidden');
+            
+            screenQuiz.classList.add('hidden');
+            screenResults.classList.add('hidden');
+            screenWelcome.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
